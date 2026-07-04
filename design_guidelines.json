@@ -1,0 +1,159 @@
+{
+  "project_name": "Vyapar AI",
+  "tagline": "The AI Employee for Offline Businesses",
+  "theme_archetype": {
+    "archetype_id": 4,
+    "archetype_name": "Swiss & High-Contrast (Soft Utility Variant)",
+    "theme": "light",
+    "description": "Clean, authoritative, function-first but highly polished. Inspired by Apple, Stripe, Linear, and Raycast. Combines soft glassmorphism with high-utility layouts. Emphasizes pure white backgrounds with subtle grayscale nesting and a strong primary accent."
+  },
+  "colors": {
+    "background": {
+      "primary": "#FFFFFF",
+      "secondary": "#F9FAFB",
+      "tertiary": "#F1F5F9"
+    },
+    "brand": {
+      "primary": "#245AB1",
+      "primary_hover": "#1D4A90",
+      "primary_light": "#EBF1FA",
+      "accent": "#38BDF8"
+    },
+    "text": {
+      "primary": "#0F172A",
+      "secondary": "#475569",
+      "tertiary": "#94A3B8",
+      "inverse": "#FFFFFF"
+    },
+    "border": {
+      "light": "#F1F5F9",
+      "default": "#E2E8F0",
+      "focus": "#245AB1"
+    },
+    "status": {
+      "success": "#10B981",
+      "success_bg": "#ECFDF5",
+      "warning": "#F59E0B",
+      "warning_bg": "#FFFBEB",
+      "error": "#EF4444",
+      "error_bg": "#FEF2F2"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "headings": "Outfit, sans-serif",
+      "body": "Plus Jakarta Sans, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scales": {
+      "h1": "text-4xl sm:text-5xl font-semibold tracking-tight leading-tight",
+      "h2": "text-2xl sm:text-3xl font-semibold tracking-tight",
+      "h3": "text-xl sm:text-2xl font-medium tracking-tight",
+      "body": "text-base leading-relaxed text-slate-600",
+      "small": "text-sm text-slate-500",
+      "overline": "text-xs font-bold uppercase tracking-[0.2em] text-slate-400"
+    }
+  },
+  "spacing_and_layout": {
+    "grid_system": "Dashboard Control Room Mode. Base grid: grid-cols-1 md:grid-cols-4 lg:grid-cols-12 with generous gap-6 or gap-8.",
+    "container_padding": "px-6 py-8 md:px-12 md:py-12",
+    "card_padding": "p-6 md:p-8",
+    "sidebar_width": "w-64",
+    "topbar_height": "h-16"
+  },
+  "component_styles": {
+    "cards": {
+      "base": "bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300",
+      "hover": "hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)] hover:-translate-y-1",
+      "interactive": true
+    },
+    "buttons": {
+      "primary": "bg-[#245AB1] text-white hover:bg-[#1D4A90] px-6 py-2.5 rounded-xl font-medium shadow-sm transition-all active:scale-[0.98]",
+      "secondary": "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 px-6 py-2.5 rounded-xl font-medium transition-all active:scale-[0.98]",
+      "ghost": "bg-transparent text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-xl transition-colors"
+    },
+    "command_bar": {
+      "wrapper": "w-full max-w-3xl mx-auto rounded-2xl bg-white/70 backdrop-blur-2xl backdrop-saturate-150 border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden",
+      "input": "w-full bg-transparent text-2xl px-8 py-6 text-slate-800 placeholder-slate-400 outline-none",
+      "shortcut_hint": "bg-slate-100 text-slate-500 px-2 py-1 rounded-md text-xs font-mono"
+    },
+    "sidebar": {
+      "wrapper": "bg-[#F9FAFB] border-r border-slate-200 h-screen flex flex-col justify-between",
+      "link_active": "bg-white text-[#245AB1] rounded-xl shadow-sm border border-slate-100 font-medium",
+      "link_inactive": "text-slate-500 hover:bg-slate-100 rounded-xl transition-colors"
+    },
+    "inputs": {
+      "base": "w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#245AB1]/20 focus:border-[#245AB1] transition-all"
+    },
+    "glass_effects": "Use backdrop-blur-xl bg-white/70 with a 1px border-white/40 for floating elements like the topbar, sticky headers, and command palettes.",
+    "loading_skeletons": "bg-slate-200 animate-pulse rounded-xl"
+  },
+  "animations": {
+    "transitions": "transition-all duration-300 ease-in-out",
+    "entrance": "Use framer-motion for smooth staggered entrances: initial={{opacity:0, y:10}} animate={{opacity:1, y:0}}",
+    "micro_interactions": "active:scale-[0.98] on buttons, hover translate-y-1 on cards, subtle group-hover icon shifts."
+  },
+  "icons": {
+    "library": "lucide-react",
+    "style": "Clean, line-based, stroke-width 1.5 or 2 depending on visual weight. Premium feel."
+  },
+  "accessibility_and_testing": {
+    "focus_states": "focus:ring-2 focus:ring-[#245AB1]/20 focus:border-[#245AB1] outline-none",
+    "test_ids": "All interactive elements MUST include data-testid (e.g., data-testid='sidebar-nav-products', data-testid='command-bar-input')"
+  },
+  "media": {
+    "images": {
+      "profile": {
+        "url": "https://images.unsplash.com/photo-1544168190-79c17527004f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwxfHxzbWlsaW5nJTIwcHJvZmVzc2lvbmFsJTIwYXNpYW4lMjBtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3ODMxODk1MTN8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Profile picture of Jay, the business owner."
+      },
+      "products": [
+        {
+          "id": "prod_1",
+          "category": "bag",
+          "url": "https://images.unsplash.com/photo-1637759292654-a12cb2be085e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTV8MHwxfHNlYXJjaHwzfHxoYW5kbWFkZSUyMGxlYXRoZXIlMjBiYWd8ZW58MHx8fHwxNzgzMTg5NTEzfDA&ixlib=rb-4.1.0&q=85",
+          "description": "Brown handmade leather handbag."
+        },
+        {
+          "id": "prod_2",
+          "category": "bag",
+          "url": "https://images.unsplash.com/photo-1624687943971-e86af76d57de?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTV8MHwxfHNlYXJjaHwyfHxoYW5kbWFkZSUyMGxlYXRoZXIlMjBiYWd8ZW58MHx8fHwxNzgzMTg5NTEzfDA&ixlib=rb-4.1.0&q=85",
+          "description": "Brown leather handbag on table."
+        },
+        {
+          "id": "prod_3",
+          "category": "wallet",
+          "url": "https://images.unsplash.com/photo-1636023189308-06668418548d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNTl8MHwxfHNlYXJjaHwxfHxoYW5kbWFkZSUyMHdhbGxldCUyMHB1cnNlfGVufDB8fHx8MTc4MzE4OTUxM3ww&ixlib=rb-4.1.0&q=85",
+          "description": "Handmade leather wallets."
+        },
+        {
+          "id": "prod_4",
+          "category": "wallet",
+          "url": "https://images.unsplash.com/photo-1639256853919-950a673b1fbc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNTl8MHwxfHNlYXJjaHwyfHxoYW5kbWFkZSUyMHdhbGxldCUyMHB1cnNlfGVufDB8fHx8MTc4MzE4OTUxM3ww&ixlib=rb-4.1.0&q=85",
+          "description": "Stacked leather wallets."
+        },
+        {
+          "id": "prod_5",
+          "category": "tote",
+          "url": "https://images.unsplash.com/photo-1630381260512-e3fe55c11973?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwzfHxjYW52YXMlMjB0b3RlJTIwYmFnfGVufDB8fHx8MTc4MzE4OTUxM3ww&ixlib=rb-4.1.0&q=85",
+          "description": "White canvas tote bag."
+        },
+        {
+          "id": "prod_6",
+          "category": "tote",
+          "url": "https://images.unsplash.com/photo-1544816155-12df9643f363?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwyfHxjYW52YXMlMjB0b3RlJTIwYmFnfGVufDB8fHx8MTc4MzE4OTUxM3ww&ixlib=rb-4.1.0&q=85",
+          "description": "Beige eco tote bag."
+        }
+      ]
+    }
+  },
+  "instructions_to_main_agent": [
+    "Use the Command Bar as the hero element on the Home Dashboard. Apply the glassmorphism backdrop classes provided to make it look magical and high-end, similar to Raycast.",
+    "Implement fluid, staggered framer-motion animations for entering cards (Smart Suggestions, Recent Activity) on the dashboard.",
+    "Build the dashboard using the specified grid layout logic. Ensure card containers use large paddings (p-6 or p-8) and soft shadows for the Stripe/Linear feel.",
+    "Avoid Bootstrap-style visual clutter. Keep the UI airy with plenty of negative space.",
+    "Utilize the provided product images to mock out the Products grid and Recent Activity sections to make the demo feel realistic and investor-ready.",
+    "All navigation/sidebar links, buttons, and command items MUST include appropriate data-testid attributes for testing.",
+    "Apply the primary accent color (#245AB1) sparingly for high-impact actions and active states."
+  ]
+}

@@ -617,7 +617,7 @@ DEMO_IMAGES = {
 DEMO_PRODUCTS = [
     ("Blue Star Bag", "Bags", 1299, 12, "Signature blue-star embroidered handbag, hand-stitched by artisans in Jaipur."),
     ("Floral Wallet", "Wallets", 499, 24, "Compact vegan-leather wallet with hand-painted floral motifs."),
-    ("Canvas Tote", "Bags", 799, 18, "Sturdy natural canvas tote — perfect for daily grocery runs."),
+    ("Canvas Tote", "Bags", 799, 18, "Sturdy natural canvas tote, perfect for daily grocery runs."),
     ("Laptop Sleeve", "Accessories", 1499, 3, "Padded 14\" laptop sleeve in soft handwoven cotton."),
     ("Coin Purse", "Wallets", 249, 40, "Palm-sized coin purse with brass zipper."),
     ("Travel Pouch", "Accessories", 599, 15, "Multi-compartment travel pouch for cables and cosmetics."),

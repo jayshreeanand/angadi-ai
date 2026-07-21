@@ -83,10 +83,10 @@ export default function Dashboard() {
       </div>
 
       <div className="mt-7 grid grid-cols-2 gap-4 lg:grid-cols-4" data-testid="stats-grid">
-        <StatCard i={0} testId="stat-sales-today" label="Sales today" value={stats?.sales_today ?? "—"} hint="orders processed" icon={ShoppingBag} />
-        <StatCard i={1} testId="stat-revenue-today" label="Revenue today" value={stats ? `₹${stats.revenue_today.toLocaleString("en-IN")}` : "—"} hint="gross" icon={IndianRupee} />
-        <StatCard i={2} testId="stat-products" label="Products" value={stats?.products ?? "—"} hint="in catalogue" icon={Package} />
-        <StatCard i={3} testId="stat-low-stock" label="Low stock" value={stats?.low_stock ?? "—"} hint="needs attention" icon={AlertTriangle} accent="text-amber-500" />
+        <StatCard i={0} testId="stat-sales-today" label="Sales today" value={stats?.sales_today ?? "..."} hint="orders processed" icon={ShoppingBag} />
+        <StatCard i={1} testId="stat-revenue-today" label="Revenue today" value={stats ? `₹${stats.revenue_today.toLocaleString("en-IN")}` : "..."} hint="gross" icon={IndianRupee} />
+        <StatCard i={2} testId="stat-products" label="Products" value={stats?.products ?? "..."} hint="in catalogue" icon={Package} />
+        <StatCard i={3} testId="stat-low-stock" label="Low stock" value={stats?.low_stock ?? "..."} hint="needs attention" icon={AlertTriangle} accent="text-amber-500" />
       </div>
 
       <section className="mt-9">

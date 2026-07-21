@@ -5,16 +5,16 @@ import { SAMPLE_BUSINESSES, SAMPLE_PRODUCTS } from "@/lib/sampleBusinesses";
 
 const steps = [
   { n: "01", icon: Camera, title: "Show the product", copy: "Shoot a photo, record a short video, or upload one you already have. No lightbox or catalogue setup." },
-  { n: "02", icon: Mic2, title: "Tell us what you know", copy: "Speak the price, stock and story naturally—in Tamil, Hindi, Telugu or English." },
+  { n: "02", icon: Mic2, title: "Tell us what you know", copy: "Speak the price, stock and story naturally in Tamil, Hindi, Telugu or English." },
   { n: "03", icon: Store, title: "Open your online shelf", copy: "Angadi prepares the listing and publishes it to a storefront your customers can share." },
 ];
 
 const storeTools = [
   { icon: Boxes, title: "Inventory that stays in sync", copy: "Every sale updates stock automatically, with clear low-stock alerts before you run out.", to: "/products" },
-  { icon: Users, title: "A simple customer book", copy: "Keep names, contact details, order history and lifetime value together—not scattered across notebooks.", to: "/customers" },
+  { icon: Users, title: "A simple customer book", copy: "Keep names, contact details, order history and lifetime value together, not scattered across notebooks.", to: "/customers" },
   { icon: Receipt, title: "Billing without double entry", copy: "Create invoices quickly and let Angadi update the order and inventory at the same time.", to: "/billing" },
   { icon: ShoppingBag, title: "Orders in one place", copy: "See what is pending, packed or dispatched, so no WhatsApp order gets forgotten.", to: "/orders" },
-  { icon: MessageCircle, title: "A WhatsApp-ready catalogue", copy: "Share the whole store—or one product—with customers using a familiar channel.", to: "/store/yuva" },
+  { icon: MessageCircle, title: "A WhatsApp-ready catalogue", copy: "Share the whole store or one product with customers using a familiar channel.", to: "/store/yuva" },
   { icon: BarChart3, title: "Insights made understandable", copy: "Know today's revenue, best sellers and slow-moving stock without learning spreadsheets.", to: "/analytics" },
 ];
 
@@ -44,11 +44,11 @@ export default function Landing() {
             <motion.div initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} className="inline-flex items-center gap-2 border-b border-[#181A17]/20 pb-2 text-xs font-semibold uppercase tracking-[.18em]">
               <span className="h-2 w-2 rounded-full bg-[#FF5C35]" /> Born inside a real handmade bag business
             </motion.div>
-            <motion.h1 initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{delay:.08}} className="mt-8 max-w-4xl text-[clamp(3.7rem,8vw,8rem)] font-semibold leading-[.82] tracking-[-.075em]">
-              Your shelf is <span className="font-serif font-normal italic tracking-[-.06em] text-[#FF5C35]">already</span> a store.
+            <motion.h1 initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{delay:.08}} className="mt-8 max-w-4xl text-[clamp(3.2rem,6.5vw,6.7rem)] font-semibold leading-[.88] tracking-[-.07em]">
+              Bringing India’s local sellers <span className="font-serif font-normal italic tracking-[-.05em] text-[#FF5C35]">online,</span> one product at a time.
             </motion.h1>
             <motion.p initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{delay:.16}} className="mt-8 max-w-xl text-lg leading-relaxed text-[#54564F] md:text-xl">
-              Angadi helps offline shopkeepers become online sellers using only a product photo or video—and their voice.
+              Angadi helps offline shopkeepers become online sellers by turning a simple product photo or video and the shopkeeper’s own voice into a ready-to-share online store in about 90 seconds.
             </motion.p>
             <motion.div initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{delay:.24}} className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link to="/studio?mode=photo" className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#FF5C35] px-7 py-4 text-sm font-bold text-white shadow-[0_16px_40px_-18px_rgba(255,92,53,.8)] transition hover:-translate-y-0.5 hover:bg-[#E94B27]">
@@ -105,7 +105,7 @@ export default function Landing() {
             <div className="max-w-3xl">
               <div className="text-xs font-black uppercase tracking-[.2em]">India's opportunity is still on the shelf</div>
               <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-[-.04em] md:text-5xl">Roughly 93% of Indian retail still happened offline in 2024.</h2>
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#474940] md:text-base">Online retail was just 7% of a $1.06 trillion market. Angadi is built for the shopkeepers and makers who already have great products—but not an easy way to list them.</p>
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#474940] md:text-base">Online retail was just 7% of a $1.06 trillion market. Angadi is built for the shopkeepers and makers who already have great products but not an easy way to list them.</p>
               <a href="https://www.deloitte.com/in/en/about/press-room/india-s-us-1-06-trillion-retail-sector-is-set-to-reach-1-93-trillion-by-2030.html" target="_blank" rel="noreferrer" className="mt-5 inline-block text-[10px] font-semibold underline decoration-[#181A17]/30 underline-offset-4">Source: Deloitte–FICCI retail report, 2025</a>
             </div>
           </div>
@@ -146,7 +146,7 @@ export default function Landing() {
                 <div className="text-xs font-bold uppercase tracking-[.2em] text-[#D9F15B]">More than a product lister</div>
                 <h2 className="mt-4 text-5xl font-semibold leading-[.92] tracking-[-.06em] md:text-7xl">Your store,<br/><span className="font-serif font-normal italic text-[#E8B9A8]">after it goes online.</span></h2>
               </div>
-              <p className="max-w-2xl text-lg leading-relaxed text-white/55">Angadi stays useful after the first listing. It helps a shopkeeper run inventory, customers, orders and billing from one calm workspace—and speak to the store instead of learning every screen.</p>
+              <p className="max-w-2xl text-lg leading-relaxed text-white/55">Angadi stays useful after the first listing. It helps a shopkeeper run inventory, customers, orders and billing from one calm workspace, and speak to the store instead of learning every screen.</p>
             </div>
 
             <div className="mt-14 grid gap-5 lg:grid-cols-[1.05fr_1.95fr]">
@@ -188,7 +188,7 @@ export default function Landing() {
         </section>
       </main>
 
-      <footer className="border-t border-[#181A17]/15 px-5 py-8 md:px-10 lg:px-14"><div className="mx-auto flex max-w-[1320px] flex-col justify-between gap-4 text-xs text-[#686A63] md:flex-row"><span className="font-semibold text-[#181A17]">Angadi AI — from shelf to store.</span><span>Built first for Yuva. Designed for India's offline sellers.</span><span>© 2026 Angadi AI</span></div></footer>
+      <footer className="border-t border-[#181A17]/15 px-5 py-8 md:px-10 lg:px-14"><div className="mx-auto flex max-w-[1320px] flex-col justify-between gap-4 text-xs text-[#686A63] md:flex-row"><span className="font-semibold text-[#181A17]">Angadi AI: from shelf to store.</span><span>Built first for Yuva. Designed for India's offline sellers.</span><span>© 2026 Angadi AI</span></div></footer>
     </div>
   );
 }

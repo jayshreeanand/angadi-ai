@@ -92,9 +92,6 @@ export default function AppShell() {
             <Bell className="w-4 h-4 text-slate-600" />
             <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#245AB1] rounded-full"></span>
           </button>
-          <div className="w-9 h-9 rounded-full bg-slate-100 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1544168190-79c17527004f?crop=entropy&cs=srgb&fm=jpg&q=85&w=80" alt="profile" className="w-full h-full object-cover" />
-          </div>
         </header>
 
         <main className="flex-1 overflow-y-auto pb-20 md:pb-0">

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, Camera, Sparkles, Loader2, ArrowLeft, Check, Wand2, Mic, MicOff, Languages, Globe2 } from "lucide-react";
+import { Upload, Camera, Sparkles, Loader2, ArrowLeft, Check, Wand2, Mic, MicOff, Languages, Globe2, Video, ExternalLink } from "lucide-react";
 import { api } from "@/lib/api";
 import { useApp } from "@/lib/store";
 import { toast } from "sonner";
@@ -17,6 +17,51 @@ const readAsBase64 = (file) => new Promise((res, rej) => {
   r.readAsDataURL(file);
 });
 
+const captureVideoFrame = (file) => new Promise((resolve, reject) => {
+  const url = URL.createObjectURL(file);
+  const video = document.createElement("video");
+  let settled = false;
+  const cleanup = () => URL.revokeObjectURL(url);
+  const fail = (error) => {
+    if (settled) return;
+    settled = true;
+    cleanup();
+    reject(error);
+  };
+  const drawFrame = () => {
+    if (settled) return;
+    try {
+      if (!video.videoWidth || !video.videoHeight) throw new Error("No video frame available");
+      const maxWidth = 1200;
+      const scale = Math.min(1, maxWidth / video.videoWidth);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(video.videoWidth * scale));
+      canvas.height = Math.max(1, Math.round(video.videoHeight * scale));
+      const context = canvas.getContext("2d");
+      if (!context) throw new Error("Unable to create a video preview");
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const preview = canvas.toDataURL("image/jpeg", 0.9);
+      settled = true;
+      cleanup();
+      resolve({ preview, base64: preview.split(",")[1] });
+    } catch (error) {
+      fail(error);
+    }
+  };
+  video.muted = true;
+  video.playsInline = true;
+  video.preload = "metadata";
+  video.onloadedmetadata = () => {
+    const duration = Number.isFinite(video.duration) ? video.duration : 0;
+    const target = Math.min(duration * 0.2, 2);
+    if (target > 0.01) video.currentTime = target;
+    else drawFrame();
+  };
+  video.onseeked = drawFrame;
+  video.onerror = () => fail(new Error("Unable to read this video"));
+  video.src = url;
+});
+
 export default function AddProduct() {
   const [items, setItems] = useState([]); // {id, preview, status, meta, cleaned}
   const [dragging, setDragging] = useState(false);
@@ -25,6 +70,7 @@ export default function AddProduct() {
   const [language, setLanguage] = useState("ta-IN");
   const inputRef = useRef(null);
   const cameraRef = useRef(null);
+  const videoRef = useRef(null);
   const recognitionRef = useRef(null);
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -69,17 +115,27 @@ export default function AddProduct() {
 
   const handleFiles = async (files) => {
     const arr = Array.from(files).slice(0, 6);
-    const drafts = await Promise.all(arr.map(async (f) => {
-      const b64 = await readAsBase64(f);
-      return {
-        id: crypto.randomUUID(),
-        preview: `data:${f.type};base64,${b64}`,
-        base64: b64,
-        status: "analyzing",
-        meta: null,
-        cleaned: null,
-      };
-    }));
+    let drafts;
+    try {
+      drafts = await Promise.all(arr.map(async (f) => {
+        const isVideo = f.type.startsWith("video/");
+        const captured = isVideo ? await captureVideoFrame(f) : null;
+        const b64 = captured?.base64 || await readAsBase64(f);
+        return {
+          id: crypto.randomUUID(),
+          preview: captured?.preview || `data:${f.type};base64,${b64}`,
+          base64: b64,
+          sourceType: isVideo ? "video" : "image",
+          sourceName: f.name,
+          status: "analyzing",
+          meta: null,
+          cleaned: null,
+        };
+      }));
+    } catch (error) {
+      toast.error("That video could not be read. Try a shorter MP4, MOV or WebM file.");
+      return;
+    }
     setItems((prev) => [...prev, ...drafts]);
     drafts.forEach(async (d) => {
       try {
@@ -127,7 +183,7 @@ export default function AddProduct() {
       </button>
       <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-[#A94827]"><Sparkles className="w-3.5 h-3.5"/> Shelf to store</div>
       <h1 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight" style={{ fontFamily: "Outfit, sans-serif" }}>Show the product. Tell its story.</h1>
-      <p className="mt-2 text-sm text-slate-500 max-w-2xl">Take a photo and describe the product naturally. Angadi turns both into a ready-to-sell online listing.</p>
+      <p className="mt-2 text-sm text-slate-500 max-w-2xl">Take a photo or short video and describe the product naturally. Angadi turns both into a ready-to-sell online listing.</p>
 
       <div className="mt-6 rounded-2xl border border-orange-100 bg-[#FFF9F5] p-5">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -159,24 +215,43 @@ export default function AddProduct() {
         onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
         onDrop={(e) => { e.preventDefault(); setDragging(false); handleFiles(e.dataTransfer.files); }}
-        className={`mt-6 rounded-2xl border-2 border-dashed p-10 text-center transition-all ${dragging ? "border-[#245AB1] bg-[#EBF1FA]/50" : "border-slate-200 bg-slate-50/50"}`}
+        className={`mt-6 rounded-2xl border-2 border-dashed p-6 md:p-10 text-center transition-all ${dragging ? "border-[#C85C32] bg-orange-50/50" : "border-slate-200 bg-slate-50/50"}`}
         data-testid="dropzone"
       >
         <div className="mx-auto w-14 h-14 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center">
-          <Upload className="w-6 h-6 text-[#245AB1]" />
+          <Upload className="w-6 h-6 text-[#C85C32]" />
         </div>
-        <div className="mt-4 text-slate-700 font-medium">Drop product photos here</div>
-        <div className="text-xs text-slate-500 mt-1">or use the buttons below · up to 6 at once</div>
-        <div className="mt-5 flex items-center justify-center gap-2">
+        <div className="mt-4 text-slate-700 font-medium">Drop product photos or a short video here</div>
+        <div className="text-xs text-slate-500 mt-1">For video, Angadi extracts a clear product frame automatically.</div>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
           <button onClick={() => inputRef.current?.click()} data-testid="upload-btn" className="text-sm px-4 py-2 rounded-xl bg-[#C85C32] hover:bg-[#A94827] text-white flex items-center gap-2 transition active:scale-[0.98]">
             <Upload className="w-4 h-4" /> Upload images
           </button>
           <button onClick={() => cameraRef.current?.click()} className="text-sm px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 flex items-center gap-2 text-slate-700" data-testid="camera-btn">
             <Camera className="w-4 h-4" /> Camera
           </button>
+          <button onClick={() => videoRef.current?.click()} className="text-sm px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 flex items-center gap-2 text-slate-700" data-testid="video-btn">
+            <Video className="w-4 h-4" /> Upload video
+          </button>
         </div>
         <input ref={inputRef} type="file" multiple accept="image/*" hidden onChange={(e) => handleFiles(e.target.files)} />
         <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={(e) => handleFiles(e.target.files)} />
+        <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" hidden onChange={(e) => handleFiles(e.target.files)} />
+
+        <div className="mx-auto mt-7 max-w-xl border-t border-slate-200 pt-5">
+          <div className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">No product handy? Try a sample</div>
+          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <button onClick={() => navigate("/products/new?sample=yuva")} className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-2.5 text-left transition hover:border-[#C85C32] hover:shadow-sm">
+              <img src={SAMPLE_PRODUCTS[0].image} alt="Sample handmade bag" className="h-12 w-12 rounded-lg object-cover" />
+              <span><span className="block text-xs font-semibold">Handmade Yuva bag</span><span className="mt-0.5 block text-[10px] text-slate-500">Tamil voice + product photo</span></span>
+            </button>
+            <button onClick={() => navigate("/products/new?sample=saree")} className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-2.5 text-left transition hover:border-[#C85C32] hover:shadow-sm">
+              <img src={SAMPLE_BUSINESSES[1].image} alt="Sample handloom saree" className="h-12 w-12 rounded-lg object-cover" />
+              <span><span className="block text-xs font-semibold">Sambalpuri saree</span><span className="mt-0.5 block text-[10px] text-slate-500">Hindi voice + product visual</span></span>
+            </button>
+          </div>
+          <a href={SAMPLE_BUSINESSES[1].video} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-semibold text-[#A94827] hover:underline">Watch the saree-selling reference <ExternalLink className="h-3 w-3" /></a>
+        </div>
       </div>
 
       {/* generated items */}
@@ -198,6 +273,7 @@ export default function AddProduct() {
                   <div className="flex gap-4">
                     <div className="w-24 h-24 rounded-xl overflow-hidden bg-slate-100 shrink-0 relative">
                       <img src={it.cleaned || it.preview} alt="" className="w-full h-full object-cover" />
+                      {it.sourceType === "video" && <span className="absolute left-1.5 top-1.5 flex items-center gap-1 rounded-full bg-slate-950/75 px-2 py-1 text-[9px] font-semibold text-white"><Video className="h-2.5 w-2.5"/> Video frame</span>}
                       {it.status === "analyzing" && (
                         <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center">
                           <Loader2 className="w-5 h-5 text-[#245AB1] animate-spin" />

@@ -1,12 +1,9 @@
-import { useEffect, useState } from "react";
 import { ArrowLeft, Heart, Instagram, MapPin, MessageCircle, ShoppingBag, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import { api } from "@/lib/api";
 import { SAMPLE_PRODUCTS } from "@/lib/sampleBusinesses";
 
 export default function Storefront() {
-  const [products, setProducts] = useState(SAMPLE_PRODUCTS);
-  useEffect(() => { api.products().then(items => { const online = items.filter(p=>p.online); if (online.length) setProducts(online); }).catch(()=>{}); }, []);
+  const products = SAMPLE_PRODUCTS;
   return (
     <div className="min-h-screen bg-[#FBF7F1] text-[#26231F]">
       <div className="bg-[#20362B] px-4 py-2 text-center text-xs text-white">Free delivery in Chennai on orders above ₹1,500</div>

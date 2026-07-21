@@ -1,8 +1,7 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingCart, Receipt, Users, BarChart3, Settings as SettingsIcon, Search, Bell, Play, Clapperboard, Store, Camera, ScanLine } from "lucide-react";
-import { useEffect, useState } from "react";
+import { LayoutDashboard, Package, ShoppingCart, Receipt, Users, BarChart3, Settings as SettingsIcon, Search, Bell, Clapperboard, Store, Camera, ScanLine } from "lucide-react";
+import { useEffect } from "react";
 import { useApp } from "@/lib/store";
-import DemoMode from "@/components/DemoMode";
 
 const NAV = [
   { to: "/app", label: "Dashboard", icon: LayoutDashboard, testId: "sidebar-nav-dashboard" },
@@ -18,7 +17,6 @@ const NAV = [
 
 export default function AppShell() {
   const { refreshAll } = useApp();
-  const [demoOpen, setDemoOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => { refreshAll(); }, [refreshAll]);
@@ -54,14 +52,7 @@ export default function AppShell() {
         </nav>
 
         <div className="p-3">
-          <button
-            data-testid="watch-demo-btn"
-            onClick={() => setDemoOpen(true)}
-            className="w-full flex items-center justify-center gap-2 bg-[#C85C32] hover:bg-[#A94827] text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition active:scale-[0.98]"
-          >
-            <Play className="w-4 h-4 fill-white" /> Watch 90s Demo
-          </button>
-          <div className="mt-3 px-2 py-2 rounded-xl bg-white border border-slate-100 flex items-center gap-2">
+          <div className="px-2 py-2 rounded-xl bg-white border border-slate-100 flex items-center gap-2">
             <img src="https://images.unsplash.com/photo-1544168190-79c17527004f?crop=entropy&cs=srgb&fm=jpg&q=85&w=80" alt="Jay" className="w-8 h-8 rounded-full object-cover" />
             <div className="min-w-0">
               <div className="text-sm font-medium truncate">Yuva</div>
@@ -106,8 +97,6 @@ export default function AppShell() {
         <NavLink to="/samples" className={({isActive})=>`flex flex-col items-center gap-1 text-[10px] ${isActive?"text-[#C85C32]":"text-slate-500"}`}><Clapperboard className="w-5 h-5"/>Stories</NavLink>
         <NavLink to="/store/yuva" className="flex flex-col items-center gap-1 text-[10px] text-slate-500"><Store className="w-5 h-5"/>Store</NavLink>
       </nav>
-
-      <DemoMode open={demoOpen} onClose={() => setDemoOpen(false)} />
     </div>
   );
 }

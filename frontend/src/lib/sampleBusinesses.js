@@ -5,10 +5,10 @@ export const SAMPLE_BUSINESSES = [
     owner: "A homegrown bag maker",
     language: "Tamil",
     category: "Handmade bags",
-    image: "https://images.unsplash.com/photo-1637759292654-a12cb2be085e?auto=format&fit=crop&w=1200&q=85",
+    image: "/angadi-local-seller-hero.jpg",
     video: "https://www.pexels.com/video/a-woman-makes-a-reusable-and-washable-bag-made-of-cloth-3755536/",
-    quote: "இந்த பை கையால் செய்தது. விலை ஆயிரத்து இருநூறு ரூபாய். இரண்டு பைகள் உள்ளன.",
-    translation: "This bag is handmade. The price is ₹1,200 and two pieces are available.",
+    quote: "இந்த பை கையால் செய்தது. விலை எண்ணூற்று ஐம்பது ரூபாய். ஐந்து பைகள் உள்ளன.",
+    translation: "This bag is handmade. The price is ₹850 and five pieces are available.",
     color: "from-amber-900/75 to-orange-700/20",
   },
   {
@@ -50,7 +50,7 @@ export const SAMPLE_BUSINESSES = [
 ];
 
 export const SAMPLE_PRODUCTS = [
-  { id: "sample-1", title: "Handcrafted Tan Shoulder Bag", description: "A warm tan everyday shoulder bag with a clean silhouette and carefully finished stitching.", category: "Handmade bags", price: 1200, stock: 2, sku: "ANG-YU01", image: "https://images.unsplash.com/photo-1637759292654-a12cb2be085e?auto=format&fit=crop&w=900&q=85", online: true },
-  { id: "sample-2", title: "Natural Canvas Tote", description: "Lightweight natural canvas tote with reinforced handles for markets, work and everyday errands.", category: "Tote bags", price: 850, stock: 5, sku: "ANG-YU02", image: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=85", online: true },
-  { id: "sample-3", title: "Handwoven Sling Bag", description: "Compact crossbody sling with a handwoven strap and an easy-access inner pocket.", category: "Sling bags", price: 999, stock: 3, sku: "ANG-YU03", image: "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?auto=format&fit=crop&w=900&q=85", online: true },
+  { id: "sample-1", title: "Indigo Botanical Tote", description: "A roomy natural cotton tote, hand block-printed with indigo botanicals and small mustard details.", category: "Block-print totes", price: 850, stock: 5, sku: "ANG-YU01", image: "/yuva-indigo-tote.jpg", online: true },
+  { id: "sample-2", title: "Rang Patchwork Shoulder Bag", description: "A softly quilted shoulder bag pieced from rust, mustard and indigo block-printed cotton panels.", category: "Quilted shoulder bags", price: 1200, stock: 2, sku: "ANG-YU02", image: "/yuva-patchwork-shoulder.jpg", online: true },
+  { id: "sample-3", title: "Neel Block-Print Sling", description: "A compact cotton crossbody with an indigo geometric print, terracotta flap and woven strap.", category: "Cotton sling bags", price: 999, stock: 3, sku: "ANG-YU03", image: "/yuva-blockprint-sling.jpg", online: true },
 ];

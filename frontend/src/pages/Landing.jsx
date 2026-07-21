@@ -1,7 +1,7 @@
 import { ArrowRight, BarChart3, Boxes, Camera, Check, MessageCircle, Mic2, Play, Quote, Receipt, ScanLine, ShoppingBag, Sparkles, Store, Users, Video, WandSparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { SAMPLE_BUSINESSES, SAMPLE_PRODUCTS } from "@/lib/sampleBusinesses";
+import { SAMPLE_BUSINESSES } from "@/lib/sampleBusinesses";
 
 const steps = [
   { n: "01", icon: Camera, title: "Show the product", copy: "Shoot a photo, record a short video, or upload one you already have. No lightbox or catalogue setup." },
@@ -18,8 +18,14 @@ const storeTools = [
   { icon: BarChart3, title: "Insights made understandable", copy: "Know today's revenue, best sellers and slow-moving stock without learning spreadsheets.", to: "/analytics" },
 ];
 
+const heroListing = {
+  image: "/angadi-local-seller-hero.jpg",
+  title: "Hand-block printed tote",
+  price: 850,
+  stock: 5,
+};
+
 export default function Landing() {
-  const heroProduct = SAMPLE_PRODUCTS[0];
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F3EFE5] text-[#181A17] selection:bg-[#FF5C35] selection:text-white">
       <header className="relative z-40 mx-auto flex max-w-[1440px] items-center justify-between px-5 py-5 md:px-10 lg:px-14">
@@ -69,13 +75,13 @@ export default function Landing() {
           </div>
 
           <motion.div initial={{opacity:0,scale:.97}} animate={{opacity:1,scale:1}} transition={{delay:.12,duration:.65}} className="relative mx-auto h-[570px] w-full max-w-[640px] md:h-[690px]">
-            <div className="absolute inset-x-8 top-8 h-[82%] rotate-3 overflow-hidden rounded-[2.6rem] bg-[#D9D12A] shadow-[0_35px_80px_-30px_rgba(24,26,23,.45)] md:inset-x-14">
-              <img src={heroProduct.image} alt="Handcrafted Yuva shoulder bag" className="h-full w-full object-cover mix-blend-multiply" />
+            <div className="absolute inset-x-8 top-8 h-[82%] rotate-3 overflow-hidden rounded-[2.6rem] bg-[#E9E2D4] shadow-[0_35px_80px_-30px_rgba(24,26,23,.45)] md:inset-x-14">
+              <img src={heroListing.image} alt="Indian local seller arranging handmade textiles, bags and terracotta crafts" className="h-full w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#181A17]/75 via-transparent to-transparent" />
               <div className="absolute bottom-0 p-7 text-white md:p-9">
                 <div className="text-[10px] font-semibold uppercase tracking-[.22em] text-white/65">Angadi saw</div>
-                <div className="mt-2 text-2xl font-semibold md:text-3xl">{heroProduct.title}</div>
-                <div className="mt-2 text-sm text-white/70">₹{heroProduct.price.toLocaleString("en-IN")} · {heroProduct.stock} available</div>
+                <div className="mt-2 text-2xl font-semibold md:text-3xl">{heroListing.title}</div>
+                <div className="mt-2 text-sm text-white/70">₹{heroListing.price.toLocaleString("en-IN")} · {heroListing.stock} available</div>
               </div>
             </div>
             <div className="absolute left-0 top-2 -rotate-6 rounded-2xl bg-[#181A17] px-5 py-4 text-white shadow-2xl md:left-2 md:top-16">

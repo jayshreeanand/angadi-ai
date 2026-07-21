@@ -11,7 +11,7 @@ export default function Storefront() {
     <div className="min-h-screen bg-[#FBF7F1] text-[#26231F]">
       <div className="bg-[#20362B] px-4 py-2 text-center text-xs text-white">Free delivery in Chennai on orders above ₹1,500</div>
       <header className="max-w-6xl mx-auto px-5 py-5 flex items-center justify-between">
-        <Link to="/" className="text-sm flex items-center gap-2 text-stone-500 hover:text-stone-900"><ArrowLeft className="w-4 h-4"/> Angadi dashboard</Link>
+        <Link to="/app" className="text-sm flex items-center gap-2 text-stone-500 hover:text-stone-900"><ArrowLeft className="w-4 h-4"/> Angadi dashboard</Link>
         <div className="text-center"><div className="font-serif text-3xl tracking-[.22em]">YUVA</div><div className="text-[9px] tracking-[.28em] uppercase text-stone-500">Handmade with heart</div></div>
         <button className="relative"><ShoppingBag className="w-5 h-5"/><span className="absolute -right-2 -top-2 w-4 h-4 rounded-full bg-[#C85C32] text-white text-[9px] flex items-center justify-center">0</span></button>
       </header>

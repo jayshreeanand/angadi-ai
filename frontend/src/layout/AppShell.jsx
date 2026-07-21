@@ -5,7 +5,7 @@ import { useApp } from "@/lib/store";
 import DemoMode from "@/components/DemoMode";
 
 const NAV = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard, testId: "sidebar-nav-dashboard" },
+  { to: "/app", label: "Dashboard", icon: LayoutDashboard, testId: "sidebar-nav-dashboard" },
   { to: "/products", label: "Products", icon: Package, testId: "sidebar-nav-products" },
   { to: "/orders", label: "Orders", icon: ShoppingCart, testId: "sidebar-nav-orders" },
   { to: "/billing", label: "Billing", icon: Receipt, testId: "sidebar-nav-billing" },
@@ -36,7 +36,7 @@ export default function AppShell() {
         <nav className="flex-1 px-3 py-2 space-y-1">
           {NAV.map(({ to, label, icon: Icon, testId }) => (
             <NavLink
-              key={to} to={to} end={to === "/"}
+              key={to} to={to} end={to === "/app"}
               data-testid={testId}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
@@ -74,7 +74,7 @@ export default function AppShell() {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Topbar */}
         <header className="h-16 shrink-0 flex items-center gap-4 px-4 md:px-8 border-b border-slate-100 bg-white/70 backdrop-blur-xl sticky top-0 z-30">
-          <NavLink to="/" className="md:hidden flex items-center gap-2 font-semibold"><span className="w-8 h-8 rounded-lg bg-[#C85C32] text-white flex items-center justify-center"><Store className="w-4 h-4"/></span><span>Angadi<span className="text-[#C85C32]">AI</span></span></NavLink>
+          <NavLink to="/app" className="md:hidden flex items-center gap-2 font-semibold"><span className="w-8 h-8 rounded-lg bg-[#C85C32] text-white flex items-center justify-center"><Store className="w-4 h-4"/></span><span>Angadi<span className="text-[#C85C32]">AI</span></span></NavLink>
           <div className="flex-1 max-w-xl relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
@@ -103,7 +103,7 @@ export default function AppShell() {
       </div>
 
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 h-17 bg-white/95 backdrop-blur-xl border-t border-slate-100 px-4 py-2 grid grid-cols-4 shadow-[0_-8px_30px_-20px_rgba(0,0,0,.25)]">
-        <NavLink to="/" end className={({isActive})=>`flex flex-col items-center gap-1 text-[10px] ${isActive?"text-[#C85C32]":"text-slate-500"}`}><LayoutDashboard className="w-5 h-5"/>Home</NavLink>
+        <NavLink to="/app" end className={({isActive})=>`flex flex-col items-center gap-1 text-[10px] ${isActive?"text-[#C85C32]":"text-slate-500"}`}><LayoutDashboard className="w-5 h-5"/>Home</NavLink>
         <NavLink to="/products/new" className={({isActive})=>`flex flex-col items-center gap-1 text-[10px] ${isActive?"text-[#C85C32]":"text-slate-500"}`}><Camera className="w-5 h-5"/>Add</NavLink>
         <NavLink to="/samples" className={({isActive})=>`flex flex-col items-center gap-1 text-[10px] ${isActive?"text-[#C85C32]":"text-slate-500"}`}><Clapperboard className="w-5 h-5"/>Stories</NavLink>
         <NavLink to="/store/yuva" className="flex flex-col items-center gap-1 text-[10px] text-slate-500"><Store className="w-5 h-5"/>Store</NavLink>

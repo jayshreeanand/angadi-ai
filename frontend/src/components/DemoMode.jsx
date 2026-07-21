@@ -83,7 +83,7 @@ export default function DemoMode({ open, onClose }) {
 
     // step 7 - low stock
     setStep(6);
-    navigate("/");
+    navigate("/app");
     await new Promise(r => timers.current.push(setTimeout(r, 700)));
     const r4 = await api.command("show low stock");
     setTranscript(t => [...t, `📉 ${r4.response}`]);

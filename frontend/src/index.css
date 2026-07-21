@@ -89,3 +89,14 @@ h1, h2, h3, h4, h5 {
   box-shadow: 0 0 0 3px rgba(36, 90, 177, 0.18);
   border-color: #245AB1;
 }
+
+@keyframes landing-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.landing-marquee { animation: landing-marquee 24s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-marquee { animation: none; }
+}

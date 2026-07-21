@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useState, useRef } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, Camera, Sparkles, Loader2, ArrowLeft, Check, Wand2, Mic, MicOff, Languages, Globe2, Video, ExternalLink } from "lucide-react";
 import { api } from "@/lib/api";
@@ -72,7 +72,9 @@ export default function AddProduct() {
   const cameraRef = useRef(null);
   const videoRef = useRef(null);
   const recognitionRef = useRef(null);
+  const incomingCaptureHandledRef = useRef(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const [params] = useSearchParams();
   const { refreshAll } = useApp();
 
@@ -113,7 +115,7 @@ export default function AddProduct() {
 
   const stopListening = () => { recognitionRef.current?.stop(); setListening(false); };
 
-  const handleFiles = async (files) => {
+  const handleFiles = useCallback(async (files) => {
     const arr = Array.from(files).slice(0, 6);
     let drafts;
     try {
@@ -148,7 +150,15 @@ export default function AddProduct() {
         toast.error("AI analysis failed");
       }
     });
-  };
+  }, [language, transcript]);
+
+  useEffect(() => {
+    const capturedFile = location.state?.capturedFile;
+    if (!capturedFile || incomingCaptureHandledRef.current) return;
+    incomingCaptureHandledRef.current = true;
+    handleFiles([capturedFile]);
+    navigate(`${location.pathname}${location.search}`, { replace: true, state: null });
+  }, [handleFiles, location.pathname, location.search, location.state, navigate]);
 
   const updateMeta = (id, patch) => {
     setItems(prev => prev.map(x => x.id === id ? { ...x, meta: { ...x.meta, ...patch } } : x));

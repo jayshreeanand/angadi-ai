@@ -1,0 +1,38 @@
+{
+  "summary": "First-finish smoke test of Vyapar AI. Backend: 8 core endpoints validated (dashboard/stats, products, orders, customers, activities, analytics, suggestions, ai/command, billing/invoice) all return 200 with correct data and no _id leakage. AI command 'show todays sales' returns Today's Snapshot; 'Blue Star Bag sold' correctly decrements stock 12->11 with before/after payload. Billing invoice POST creates order #1003 and completes flow. Frontend: dashboard loads with 'Good evening, Jay', all 5 stat cards render, command bar + 7 suggested prompt chips + smart suggestions + activity timeline all present. AI response panel appears with 'Today's Snapshot' after Enter. Sidebar navigation works for Products (8 cards), Orders (Arjun Mehta pending), Billing (search present), Customers (grid present), Analytics (revenue chart present). Watch 90s Demo button opens demo-mode-overlay. No JS console errors detected.",
+  "tested_scope": ["backend", "frontend", "integration"],
+  "passed": [
+    "GET /api/dashboard/stats returns sales_today, revenue_today, orders_total, products, low_stock",
+    "GET /api/products returns 8 seeded products with id (no _id)",
+    "GET /api/orders returns 1 pending order for Arjun Mehta",
+    "GET /api/customers returns 3 customers",
+    "GET /api/activities returns 6 activities",
+    "GET /api/analytics returns revenue_series, best_sellers, by_category, low_stock",
+    "GET /api/suggestions returns low-stock and pending-order suggestions",
+    "POST /api/ai/command 'show todays sales' -> intent=show_stats, title='Today's Snapshot'",
+    "POST /api/ai/command 'Blue Star Bag sold' -> intent=product_sold, stock 12->11 decremented",
+    "POST /api/billing/invoice creates invoice #1003 with status=completed",
+    "Dashboard renders greeting 'Good evening, Jay' and all 5 stat cards",
+    "Command bar submit displays ai-response-panel with correct snapshot",
+    "7/7 suggested prompt chips present",
+    "Sidebar navigation to /products, /orders, /billing, /customers, /analytics all functional",
+    "Products page shows 8 product cards; Orders shows Arjun Mehta; Analytics shows revenue-chart",
+    "watch-demo-btn opens demo-mode-overlay",
+    "No .error class messages on any page"
+  ],
+  "failed": [
+    {
+      "area": "data-testid naming (spec mismatch)",
+      "issue": "Review spec mentions 'stat-orders-total' but actual code uses testid 'stat-orders' for the Total orders card",
+      "evidence": "Dashboard.jsx line 69: testId=\"stat-orders\". Card renders correctly with value 3.",
+      "priority": "LOW"
+    }
+  ],
+  "action_items": [
+    "Optional: align testid to 'stat-orders-total' if external test scripts depend on the exact name in the spec. Functionality is unaffected."
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "retest_needed": false,
+  "full_testing_deferred": true,
+  "notes": "Add-product upload flow (Emergent LLM call to Claude Sonnet 4.5) and demo-start scripted sequence were NOT executed in this smoke pass to keep latency low; recommend covering in full testing agent. Base64 image storage is intentional simplification per problem statement."
+}

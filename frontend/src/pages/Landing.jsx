@@ -1,4 +1,4 @@
-import { ArrowRight, Camera, Check, Mic2, Play, Quote, ScanLine, Sparkles, Store, Video, WandSparkles } from "lucide-react";
+import { ArrowRight, BarChart3, Boxes, Camera, Check, MessageCircle, Mic2, Play, Quote, Receipt, ScanLine, ShoppingBag, Sparkles, Store, Users, Video, WandSparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SAMPLE_BUSINESSES, SAMPLE_PRODUCTS } from "@/lib/sampleBusinesses";
@@ -7,6 +7,15 @@ const steps = [
   { n: "01", icon: Camera, title: "Show the product", copy: "Shoot a photo, record a short video, or upload one you already have. No lightbox or catalogue setup." },
   { n: "02", icon: Mic2, title: "Tell us what you know", copy: "Speak the price, stock and story naturally—in Tamil, Hindi, Telugu or English." },
   { n: "03", icon: Store, title: "Open your online shelf", copy: "Angadi prepares the listing and publishes it to a storefront your customers can share." },
+];
+
+const storeTools = [
+  { icon: Boxes, title: "Inventory that stays in sync", copy: "Every sale updates stock automatically, with clear low-stock alerts before you run out.", to: "/products" },
+  { icon: Users, title: "A simple customer book", copy: "Keep names, contact details, order history and lifetime value together—not scattered across notebooks.", to: "/customers" },
+  { icon: Receipt, title: "Billing without double entry", copy: "Create invoices quickly and let Angadi update the order and inventory at the same time.", to: "/billing" },
+  { icon: ShoppingBag, title: "Orders in one place", copy: "See what is pending, packed or dispatched, so no WhatsApp order gets forgotten.", to: "/orders" },
+  { icon: MessageCircle, title: "A WhatsApp-ready catalogue", copy: "Share the whole store—or one product—with customers using a familiar channel.", to: "/store/yuva" },
+  { icon: BarChart3, title: "Insights made understandable", copy: "Know today's revenue, best sellers and slow-moving stock without learning spreadsheets.", to: "/analytics" },
 ];
 
 export default function Landing() {
@@ -21,6 +30,7 @@ export default function Landing() {
         <nav className="hidden items-center gap-8 text-sm font-medium md:flex">
           <a href="#story" className="transition hover:text-[#FF5C35]">Why Angadi</a>
           <a href="#how" className="transition hover:text-[#FF5C35]">How it works</a>
+          <a href="#manage" className="transition hover:text-[#FF5C35]">What it manages</a>
           <Link to="/samples" className="transition hover:text-[#FF5C35]">Seller stories</Link>
         </nav>
         <Link to="/app" className="group inline-flex items-center gap-2 rounded-full bg-[#181A17] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#FF5C35] md:px-5">
@@ -126,6 +136,38 @@ export default function Landing() {
           </div>
           <div className="mt-16 grid gap-px overflow-hidden rounded-[2rem] border border-[#181A17] bg-[#181A17] lg:grid-cols-3">
             {steps.map(({n,icon:Icon,title,copy},i)=><article key={n} className={`group min-h-[340px] bg-[#F3EFE5] p-7 transition hover:bg-white md:p-10 ${i===1?"lg:-rotate-1 lg:scale-[1.015] lg:rounded-[2rem] lg:border lg:border-[#181A17]":""}`}><div className="flex items-center justify-between"><span className="text-xs font-black tracking-[.18em]">{n}</span><span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#181A17]/20 transition group-hover:rotate-6 group-hover:bg-[#D9F15B]"><Icon className="h-5 w-5"/></span></div><h3 className="mt-24 text-3xl font-semibold tracking-[-.04em]">{title}</h3><p className="mt-4 max-w-sm text-sm leading-relaxed text-[#62645D]">{copy}</p></article>)}
+          </div>
+        </section>
+
+        <section id="manage" className="bg-[#20362B] px-5 py-24 text-white md:px-10 lg:px-14 lg:py-32">
+          <div className="mx-auto max-w-[1320px]">
+            <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
+              <div>
+                <div className="text-xs font-bold uppercase tracking-[.2em] text-[#D9F15B]">More than a product lister</div>
+                <h2 className="mt-4 text-5xl font-semibold leading-[.92] tracking-[-.06em] md:text-7xl">Your store,<br/><span className="font-serif font-normal italic text-[#E8B9A8]">after it goes online.</span></h2>
+              </div>
+              <p className="max-w-2xl text-lg leading-relaxed text-white/55">Angadi stays useful after the first listing. It helps a shopkeeper run inventory, customers, orders and billing from one calm workspace—and speak to the store instead of learning every screen.</p>
+            </div>
+
+            <div className="mt-14 grid gap-5 lg:grid-cols-[1.05fr_1.95fr]">
+              <Link to="/app" className="group flex min-h-[460px] flex-col justify-between overflow-hidden rounded-[2rem] bg-[#D9F15B] p-7 text-[#181A17] transition hover:-translate-y-1 md:p-9">
+                <div>
+                  <div className="flex items-center justify-between"><span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#181A17] text-[#D9F15B]"><Mic2 className="h-5 w-5" /></span><ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" /></div>
+                  <div className="mt-8 text-xs font-black uppercase tracking-[.18em]">Voice store assistant</div>
+                  <h3 className="mt-3 text-4xl font-semibold leading-none tracking-[-.05em]">Run the shop by talking.</h3>
+                  <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#44473F]">Say “Blue Star Bag sold,” “show low stock,” or “create a bill” in English, Tamil, Hindi or Telugu.</p>
+                </div>
+                <div className="rounded-2xl bg-[#181A17] p-4 text-white shadow-xl">
+                  <div className="flex items-center gap-2 text-xs text-white/50"><span className="h-2 w-2 animate-pulse rounded-full bg-[#FF5C35]" /> Listening in Tamil…</div>
+                  <div className="mt-3 text-sm font-medium">“இன்றைய விற்பனை எவ்வளவு?”</div>
+                  <div className="mt-3 border-t border-white/10 pt-3 text-xs text-[#D9F15B]">3 sales · ₹4,297 today</div>
+                </div>
+              </Link>
+
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {storeTools.map(({icon:Icon,title,copy,to}) => <Link key={title} to={to} className="group flex min-h-[220px] flex-col rounded-[1.5rem] border border-white/10 bg-white/[.045] p-5 transition hover:border-[#D9F15B]/40 hover:bg-white/[.075] md:p-6"><div className="flex items-start justify-between"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#E8B9A8]"><Icon className="h-4 w-4" /></span><ArrowRight className="h-4 w-4 text-white/20 transition group-hover:translate-x-1 group-hover:text-[#D9F15B]" /></div><h3 className="mt-7 text-lg font-semibold tracking-[-.025em]">{title}</h3><p className="mt-2 text-xs leading-relaxed text-white/45">{copy}</p></Link>)}
+              </div>
+            </div>
           </div>
         </section>
 

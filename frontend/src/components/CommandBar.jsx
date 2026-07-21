@@ -107,7 +107,7 @@ export default function CommandBar({ onNavigate }) {
           data-testid="voice-soon"
           className="text-sm px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-slate-400 flex items-center gap-1.5"
         >
-          <Mic className="w-3.5 h-3.5" /> 🎤 Voice mode coming soon
+          <Mic className="w-3.5 h-3.5" /> Voice capture is live in Add product
         </button>
       </div>
 
@@ -126,7 +126,7 @@ export default function CommandBar({ onNavigate }) {
                 <CheckCircle2 className="w-4 h-4" />
               </div>
               <div className="flex-1">
-                <div className="font-semibold text-slate-900">{response.title || "Vyapar AI"}</div>
+                <div className="font-semibold text-slate-900">{response.title || "Angadi AI"}</div>
                 <div className="mt-1 text-sm text-slate-600 whitespace-pre-wrap">{response.response}</div>
                 {response.intent === "product_sold" && response.data && (
                   <div className="mt-3 inline-flex items-center gap-2 text-xs bg-slate-50 border border-slate-100 rounded-lg px-3 py-1.5 font-mono">

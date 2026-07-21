@@ -1,10 +1,11 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, Camera, Sparkles, Loader2, ArrowLeft, Check, Wand2 } from "lucide-react";
+import { Upload, Camera, Sparkles, Loader2, ArrowLeft, Check, Wand2, Mic, MicOff, Languages, Globe2 } from "lucide-react";
 import { api } from "@/lib/api";
 import { useApp } from "@/lib/store";
 import { toast } from "sonner";
+import { SAMPLE_BUSINESSES, SAMPLE_PRODUCTS } from "@/lib/sampleBusinesses";
 
 const readAsBase64 = (file) => new Promise((res, rej) => {
   const r = new FileReader();
@@ -19,9 +20,52 @@ const readAsBase64 = (file) => new Promise((res, rej) => {
 export default function AddProduct() {
   const [items, setItems] = useState([]); // {id, preview, status, meta, cleaned}
   const [dragging, setDragging] = useState(false);
+  const [transcript, setTranscript] = useState("");
+  const [listening, setListening] = useState(false);
+  const [language, setLanguage] = useState("ta-IN");
   const inputRef = useRef(null);
+  const cameraRef = useRef(null);
+  const recognitionRef = useRef(null);
   const navigate = useNavigate();
+  const [params] = useSearchParams();
   const { refreshAll } = useApp();
+
+  useEffect(() => {
+    const sampleId = params.get("sample");
+    if (!sampleId) return;
+    const business = SAMPLE_BUSINESSES.find(s => s.id === sampleId);
+    const product = sampleId === "yuva" ? SAMPLE_PRODUCTS[0] : {
+      title: business?.category || "Sample product",
+      description: business?.translation || "A product prepared for online sale with Angadi AI.",
+      category: business?.category || "Other",
+      price: sampleId === "saree" ? 2499 : sampleId === "bakery" ? 950 : 450,
+      stock: sampleId === "saree" ? 3 : 6,
+      sku: `ANG-${sampleId.slice(0, 2).toUpperCase()}01`, image: business?.image,
+    };
+    setTranscript(business?.quote || "");
+    setItems([{ id: crypto.randomUUID(), preview: product.image, status: "ready", cleaned: null, meta: {
+      title: product.title, description: product.description, category: product.category,
+      tags: ["local", "handmade", "small-business"], suggested_price: product.price,
+      suggested_stock: product.stock, sku: product.sku, confidence: .96,
+    }}]);
+  }, [params]);
+
+  const startListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) { toast.error("Voice capture works in Chrome and Edge. You can type the details instead."); return; }
+    const recognition = new SpeechRecognition();
+    recognition.lang = language;
+    recognition.interimResults = true;
+    recognition.continuous = false;
+    recognition.onresult = (event) => setTranscript(Array.from(event.results).map(r => r[0].transcript).join(" "));
+    recognition.onend = () => setListening(false);
+    recognition.onerror = () => { setListening(false); toast.error("I couldn't hear that. Please try again."); };
+    recognitionRef.current = recognition;
+    setListening(true);
+    recognition.start();
+  };
+
+  const stopListening = () => { recognitionRef.current?.stop(); setListening(false); };
 
   const handleFiles = async (files) => {
     const arr = Array.from(files).slice(0, 6);
@@ -39,7 +83,7 @@ export default function AddProduct() {
     setItems((prev) => [...prev, ...drafts]);
     drafts.forEach(async (d) => {
       try {
-        const r = await api.analyzeProduct(d.base64, false);
+        const r = await api.analyzeProduct(d.base64, true, transcript, language);
         setItems((prev) => prev.map(x => x.id === d.id
           ? { ...x, status: "ready", meta: r.metadata, cleaned: r.cleaned_image }
           : x));
@@ -81,8 +125,34 @@ export default function AddProduct() {
       <button onClick={() => navigate(-1)} className="text-sm text-slate-500 hover:text-slate-900 flex items-center gap-1" data-testid="back-btn">
         <ArrowLeft className="w-4 h-4" /> Back
       </button>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight" style={{ fontFamily: "Outfit, sans-serif" }}>Add products with AI</h1>
-      <p className="mt-1 text-sm text-slate-500">Upload photos. AI will name, describe, price, and categorise each one.</p>
+      <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-[#A94827]"><Sparkles className="w-3.5 h-3.5"/> Shelf to store</div>
+      <h1 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight" style={{ fontFamily: "Outfit, sans-serif" }}>Show the product. Tell its story.</h1>
+      <p className="mt-2 text-sm text-slate-500 max-w-2xl">Take a photo and describe the product naturally. Angadi turns both into a ready-to-sell online listing.</p>
+
+      <div className="mt-6 rounded-2xl border border-orange-100 bg-[#FFF9F5] p-5">
+        <div className="flex flex-col md:flex-row md:items-center gap-4">
+          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${listening ? "bg-red-500 text-white animate-pulse" : "bg-white text-[#C85C32] border border-orange-100"}`}>
+            {listening ? <MicOff className="w-5 h-5"/> : <Mic className="w-5 h-5"/>}
+          </div>
+          <div className="flex-1">
+            <div className="text-sm font-semibold">Describe it in your language</div>
+            <textarea value={transcript} onChange={e=>setTranscript(e.target.value)} rows={2}
+              placeholder="Example: Handmade blue jute bag, ₹1,200, two pieces available…"
+              className="mt-2 w-full resize-none bg-white border border-orange-100 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#C85C32]/15" />
+          </div>
+          <div className="flex md:flex-col gap-2">
+            <label className="relative flex-1">
+              <Languages className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"/>
+              <select value={language} onChange={e=>setLanguage(e.target.value)} className="w-full appearance-none rounded-xl border border-orange-100 bg-white py-2.5 pl-9 pr-7 text-xs font-medium">
+                <option value="ta-IN">தமிழ் · Tamil</option><option value="hi-IN">हिन्दी · Hindi</option><option value="en-IN">English · India</option><option value="te-IN">తెలుగు · Telugu</option>
+              </select>
+            </label>
+            <button onClick={listening ? stopListening : startListening} className={`flex-1 rounded-xl px-4 py-2.5 text-xs font-semibold text-white ${listening ? "bg-red-500" : "bg-[#C85C32] hover:bg-[#A94827]"}`}>
+              {listening ? "Stop listening" : "Speak details"}
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* dropzone */}
       <div
@@ -98,14 +168,15 @@ export default function AddProduct() {
         <div className="mt-4 text-slate-700 font-medium">Drop product photos here</div>
         <div className="text-xs text-slate-500 mt-1">or use the buttons below · up to 6 at once</div>
         <div className="mt-5 flex items-center justify-center gap-2">
-          <button onClick={() => inputRef.current?.click()} data-testid="upload-btn" className="text-sm px-4 py-2 rounded-xl bg-[#245AB1] hover:bg-[#1D4A90] text-white flex items-center gap-2 transition active:scale-[0.98]">
+          <button onClick={() => inputRef.current?.click()} data-testid="upload-btn" className="text-sm px-4 py-2 rounded-xl bg-[#C85C32] hover:bg-[#A94827] text-white flex items-center gap-2 transition active:scale-[0.98]">
             <Upload className="w-4 h-4" /> Upload images
           </button>
-          <button className="text-sm px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 flex items-center gap-2 text-slate-700" data-testid="camera-btn">
+          <button onClick={() => cameraRef.current?.click()} className="text-sm px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 flex items-center gap-2 text-slate-700" data-testid="camera-btn">
             <Camera className="w-4 h-4" /> Camera
           </button>
         </div>
         <input ref={inputRef} type="file" multiple accept="image/*" hidden onChange={(e) => handleFiles(e.target.files)} />
+        <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={(e) => handleFiles(e.target.files)} />
       </div>
 
       {/* generated items */}
@@ -114,7 +185,7 @@ export default function AddProduct() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold">AI-generated details</h3>
-              <button onClick={saveAll} data-testid="save-all-btn" className="text-sm px-4 py-2 rounded-xl bg-[#245AB1] hover:bg-[#1D4A90] text-white flex items-center gap-2 shadow-sm transition active:scale-[0.98]">
+              <button onClick={saveAll} data-testid="save-all-btn" className="text-sm px-4 py-2 rounded-xl bg-[#C85C32] hover:bg-[#A94827] text-white flex items-center gap-2 shadow-sm transition active:scale-[0.98]">
                 <Check className="w-4 h-4" /> Save {items.filter(x => x.status === "ready").length} products
               </button>
             </div>
@@ -186,6 +257,15 @@ export default function AddProduct() {
           </motion.div>
         )}
       </AnimatePresence>
+      {items.some(x => x.status === "ready") && (
+        <div className="mt-6 rounded-2xl border border-emerald-100 bg-emerald-50/50 px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center"><Globe2 className="w-4 h-4"/></div>
+            <div><div className="text-sm font-semibold">Ready for your online shelf</div><div className="text-xs text-slate-500">Save the products, then publish them to the Yuva storefront.</div></div>
+          </div>
+          <button onClick={() => window.open("/store/yuva", "_blank")} className="text-xs font-semibold text-emerald-700">Preview storefront →</button>
+        </div>
+      )}
     </div>
   );
 }

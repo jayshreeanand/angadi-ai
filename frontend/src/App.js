@@ -12,6 +12,8 @@ import Billing from "@/pages/Billing";
 import Customers from "@/pages/Customers";
 import Analytics from "@/pages/Analytics";
 import Settings from "@/pages/Settings";
+import Samples from "@/pages/Samples";
+import Storefront from "@/pages/Storefront";
 import { AppProvider } from "@/lib/store";
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
     <AppProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/store/yuva" element={<Storefront />} />
           <Route element={<AppShell />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/products" element={<Products />} />
@@ -29,6 +32,7 @@ function App() {
             <Route path="/customers" element={<Customers />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/samples" element={<Samples />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

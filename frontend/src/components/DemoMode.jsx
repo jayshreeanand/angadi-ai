@@ -6,8 +6,8 @@ import { useApp } from "@/lib/store";
 import { useNavigate } from "react-router-dom";
 
 const SCRIPT = [
-  { title: "Boot up your AI employee", detail: "Vyapar AI is now watching your store." },
-  { title: "AI catalogues 8 products", detail: "Titles, descriptions, categories, prices — all auto-generated." },
+  { title: "Show a product", detail: "A shopkeeper photographs a handmade Yuva bag." },
+  { title: "Tell its story", detail: "Tamil voice becomes price, stock, craft details and a polished listing." },
   { title: "Publishing to your storefront", detail: "Products going live online…" },
   { title: 'You say: "Blue Star Bag sold"', detail: "Inventory · Dashboard · Website · Analytics updated live." },
   { title: 'You say: "Generate bill"', detail: "Auto-billing Blue Star Bag + Floral Wallet + Laptop Sleeve." },
@@ -109,8 +109,8 @@ export default function DemoMode({ open, onClose }) {
               <div className="flex items-center gap-2">
                 <div className="w-9 h-9 rounded-xl bg-[#EBF1FA] text-[#245AB1] flex items-center justify-center"><Sparkles className="w-4 h-4" /></div>
                 <div>
-                  <div className="font-semibold">Vyapar AI · 90-second demo</div>
-                  <div className="text-xs text-slate-500">Watch an AI employee run an entire day.</div>
+                  <div className="font-semibold">Angadi AI · shelf-to-store demo</div>
+                  <div className="text-xs text-slate-500">Watch a physical product become an online listing.</div>
                 </div>
               </div>
               <button onClick={close} data-testid="demo-close" className="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><X className="w-4 h-4" /></button>

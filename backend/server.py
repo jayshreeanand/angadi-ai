@@ -22,7 +22,7 @@ db = client[os.environ['DB_NAME']]
 
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
 
-app = FastAPI(title="Vyapar AI")
+app = FastAPI(title="Angadi AI")
 api_router = APIRouter(prefix="/api")
 
 logging.basicConfig(level=logging.INFO)
@@ -139,6 +139,8 @@ class CommandRequest(BaseModel):
 class ImageAnalyzeRequest(BaseModel):
     image_base64: str
     remove_bg: bool = False
+    voice_context: str = ""
+    language: str = "en-IN"
 
 
 class ContentGenRequest(BaseModel):
@@ -372,7 +374,7 @@ async def _llm_chat(system: str, user: str) -> str:
     from emergentintegrations.llm.chat import LlmChat, UserMessage
     chat = LlmChat(
         api_key=EMERGENT_LLM_KEY,
-        session_id=f"vyapar-{uuid.uuid4()}",
+        session_id=f"angadi-{uuid.uuid4()}",
         system_message=system,
     ).with_model("anthropic", "claude-sonnet-4-5-20250929")
     resp = await chat.send_message(UserMessage(text=user))
@@ -394,13 +396,31 @@ async def ai_analyze_product(body: ImageAnalyzeRequest):
     """Analyze uploaded product image → generate title, desc, category, tags, price, stock, SKU, confidence.
        Optionally clean image with Gemini Nano Banana (background removal)."""
     system = (
-        "You are Vyapar AI's product cataloguer for offline Indian retailers. "
-        "Given a product image (implied), return ONLY a JSON object with keys: "
+        "You are Angadi AI, a multilingual product cataloguer for offline Indian retailers. "
+        "Use both the attached product image and the shopkeeper's spoken context. "
+        "The spoken context is authoritative for price, stock, material, dimensions and craft story. "
+        "Return ONLY a JSON object with keys: "
         "title, description, category, tags (array of 4-6 lowercase words), suggested_price (integer INR), "
-        "suggested_stock (integer 5-40), sku (VY-XXXX pattern), confidence (0-1). "
-        "Assume handmade bags/wallets/accessories domain. No prose, no markdown fences."
+        "suggested_stock (integer 1-40), sku (ANG-XXXX pattern), confidence (0-1). "
+        "Write customer-facing text in English while preserving specific Indian craft terms. "
+        "Never invent materials or provenance that are not visible or spoken. No prose, no markdown fences."
     )
-    ai_text = await _llm_chat(system, "Generate product metadata for the uploaded product image.")
+    spoken = body.voice_context.strip() or "No spoken details were supplied; infer only clearly visible attributes."
+    try:
+        from emergentintegrations.llm.chat import LlmChat, UserMessage, ImageContent
+        vision_chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"angadi-vision-{uuid.uuid4()}",
+            system_message=system,
+        ).with_model("anthropic", "claude-sonnet-4-5-20250929")
+        ai_text = await vision_chat.send_message(UserMessage(
+            text=f"Shopkeeper language: {body.language}. Spoken details: {spoken}",
+            file_contents=[ImageContent(body.image_base64)],
+        ))
+        ai_text = ai_text if isinstance(ai_text, str) else str(ai_text)
+    except Exception as e:
+        logger.warning(f"Vision analysis failed, using text fallback: {e}")
+        ai_text = await _llm_chat(system, f"Spoken details: {spoken}")
     parsed = _extract_json(ai_text) or {
         "title": "Handmade Product",
         "description": "Beautifully crafted handmade product.",
@@ -408,7 +428,7 @@ async def ai_analyze_product(body: ImageAnalyzeRequest):
         "tags": ["handmade", "artisan", "premium"],
         "suggested_price": 799,
         "suggested_stock": 12,
-        "sku": f"VY-{uuid.uuid4().hex[:4].upper()}",
+        "sku": f"ANG-{uuid.uuid4().hex[:4].upper()}",
         "confidence": 0.72,
     }
 
@@ -418,7 +438,7 @@ async def ai_analyze_product(body: ImageAnalyzeRequest):
             from emergentintegrations.llm.chat import LlmChat, UserMessage, ImageContent
             img_chat = LlmChat(
                 api_key=EMERGENT_LLM_KEY,
-                session_id=f"vyapar-img-{uuid.uuid4()}",
+                session_id=f"angadi-img-{uuid.uuid4()}",
                 system_message="You are a product photography assistant.",
             ).with_model("gemini", "gemini-3.1-flash-image-preview").with_params(
                 modalities=["image", "text"]
@@ -573,12 +593,12 @@ async def ai_command(body: CommandRequest):
     # Fallback → let Claude answer conversationally
     try:
         stats = await dashboard_stats()
-        context = f"You are Vyapar AI, the AI employee for an offline shop owner named Jay. Be warm, concise, action-oriented. Current inventory: {stats['products']} products, {stats['low_stock']} low, today revenue ₹{stats['revenue_today']}."
+        context = f"You are Angadi AI, a warm multilingual store assistant for Yuva, a handmade bag business. Be concise and action-oriented. Current inventory: {stats['products']} products, {stats['low_stock']} low, today revenue ₹{stats['revenue_today']}."
         ans = await _llm_chat(context, text)
-        return {"intent": "chat", "title": "Vyapar AI", "response": ans.strip()}
+        return {"intent": "chat", "title": "Angadi AI", "response": ans.strip()}
     except Exception as e:
         logger.warning(f"llm failed: {e}")
-        return {"intent": "chat", "title": "Vyapar AI",
+        return {"intent": "chat", "title": "Angadi AI",
                 "response": "I heard you, but couldn't reach my AI brain just now. Try 'show today's sales' or 'show low stock'."}
 
 
@@ -663,7 +683,7 @@ async def seed():
 
 @api_router.get("/")
 async def root():
-    return {"app": "Vyapar AI", "status": "ok"}
+    return {"app": "Angadi AI", "status": "ok"}
 
 
 app.include_router(api_router)

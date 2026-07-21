@@ -13,12 +13,17 @@ export function AppProvider({ children }) {
   const [demoRunning, setDemoRunning] = useState(false);
 
   const refreshAll = useCallback(async () => {
-    const [p, o, c, a, s, st] = await Promise.all([
-      api.products(), api.orders(), api.customers(),
-      api.activities(30), api.suggestions(), api.stats(),
-    ]);
-    setProducts(p); setOrders(o); setCustomers(c);
-    setActivities(a); setSuggestions(s); setStats(st);
+    try {
+      const [p, o, c, a, s, st] = await Promise.all([
+        api.products(), api.orders(), api.customers(),
+        api.activities(30), api.suggestions(), api.stats(),
+      ]);
+      setProducts(p); setOrders(o); setCustomers(c);
+      setActivities(a); setSuggestions(s); setStats(st);
+    } catch (error) {
+      // Keep public/sample screens usable when the local API is not running.
+      if (process.env.NODE_ENV !== "production") console.info("Angadi API is offline; using sample UI data.");
+    }
   }, []);
 
   return (

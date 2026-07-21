@@ -18,7 +18,7 @@ export default function Settings() {
   return (
     <div className="px-6 md:px-10 py-8 max-w-[1200px] mx-auto">
       <h1 className="text-3xl font-semibold tracking-tight" style={{ fontFamily: "Outfit, sans-serif" }}>Settings</h1>
-      <p className="mt-1 text-sm text-slate-500">Configure your Vyapar AI experience</p>
+      <p className="mt-1 text-sm text-slate-500">Configure your Angadi AI experience</p>
 
       <div className="mt-6 bg-white rounded-2xl border border-slate-100 p-6">
         <div className="text-xs uppercase tracking-wider text-slate-400 font-medium">Store</div>

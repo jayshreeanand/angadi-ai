@@ -5,9 +5,9 @@
 @tailwind utilities;
 
 :root {
-  --brand: #245AB1;
-  --brand-hover: #1D4A90;
-  --brand-light: #EBF1FA;
+  --brand: #C85C32;
+  --brand-hover: #A94827;
+  --brand-light: #FFF1EA;
 }
 
 html, body, #root {

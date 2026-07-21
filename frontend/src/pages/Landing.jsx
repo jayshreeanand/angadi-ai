@@ -1,6 +1,5 @@
-import { useRef } from "react";
 import { ArrowRight, Camera, Check, Mic2, Play, Quote, ScanLine, Sparkles, Store, Video, WandSparkles } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SAMPLE_BUSINESSES, SAMPLE_PRODUCTS } from "@/lib/sampleBusinesses";
 
@@ -12,15 +11,6 @@ const steps = [
 
 export default function Landing() {
   const heroProduct = SAMPLE_PRODUCTS[0];
-  const navigate = useNavigate();
-  const cameraInputRef = useRef(null);
-  const videoInputRef = useRef(null);
-
-  const openCapture = (event, source) => {
-    const capturedFile = event.target.files?.[0];
-    if (!capturedFile) return;
-    navigate(`/products/new?source=${source}`, { state: { capturedFile } });
-  };
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F3EFE5] text-[#181A17] selection:bg-[#FF5C35] selection:text-white">
       <header className="relative z-40 mx-auto flex max-w-[1440px] items-center justify-between px-5 py-5 md:px-10 lg:px-14">
@@ -51,14 +41,12 @@ export default function Landing() {
               Angadi helps offline shopkeepers become online sellers using only a product photo or video—and their voice.
             </motion.p>
             <motion.div initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{delay:.24}} className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <button onClick={() => cameraInputRef.current?.click()} className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#FF5C35] px-7 py-4 text-sm font-bold text-white shadow-[0_16px_40px_-18px_rgba(255,92,53,.8)] transition hover:-translate-y-0.5 hover:bg-[#E94B27]">
+              <Link to="/studio?mode=photo" className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#FF5C35] px-7 py-4 text-sm font-bold text-white shadow-[0_16px_40px_-18px_rgba(255,92,53,.8)] transition hover:-translate-y-0.5 hover:bg-[#E94B27]">
                 <Camera className="h-4 w-4" /> Open camera & shoot
-              </button>
-              <button onClick={() => videoInputRef.current?.click()} className="inline-flex items-center justify-center gap-3 rounded-full border border-[#181A17]/20 bg-white/50 px-7 py-4 text-sm font-bold backdrop-blur transition hover:bg-white">
+              </Link>
+              <Link to="/studio?mode=video" className="inline-flex items-center justify-center gap-3 rounded-full border border-[#181A17]/20 bg-white/50 px-7 py-4 text-sm font-bold backdrop-blur transition hover:bg-white">
                 <Video className="h-4 w-4" /> Record or upload video
-              </button>
-              <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" hidden onChange={(event) => openCapture(event, "camera")} />
-              <input ref={videoInputRef} type="file" accept="video/mp4,video/webm,video/quicktime" capture="environment" hidden onChange={(event) => openCapture(event, "video")} />
+              </Link>
               <Link to="/store/yuva" className="inline-flex items-center justify-center gap-2 px-3 py-4 text-sm font-bold transition hover:text-[#FF5C35]">
                 <Play className="h-4 w-4 fill-current" /> See Yuva's store
               </Link>
@@ -134,7 +122,7 @@ export default function Landing() {
         <section id="how" className="mx-auto max-w-[1440px] px-5 py-24 md:px-10 lg:px-14 lg:py-32">
           <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
             <div><div className="text-xs font-bold uppercase tracking-[.2em] text-[#FF5C35]">The shortest path online</div><h2 className="mt-4 max-w-3xl text-5xl font-semibold leading-[.95] tracking-[-.06em] md:text-7xl">No forms. No jargon.<br/><span className="font-serif font-normal italic">Just show and tell.</span></h2></div>
-            <Link to="/products/new" className="group flex items-center gap-2 text-sm font-bold">Try the workflow <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></Link>
+            <Link to="/studio" className="group flex items-center gap-2 text-sm font-bold">Try the workflow <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></Link>
           </div>
           <div className="mt-16 grid gap-px overflow-hidden rounded-[2rem] border border-[#181A17] bg-[#181A17] lg:grid-cols-3">
             {steps.map(({n,icon:Icon,title,copy},i)=><article key={n} className={`group min-h-[340px] bg-[#F3EFE5] p-7 transition hover:bg-white md:p-10 ${i===1?"lg:-rotate-1 lg:scale-[1.015] lg:rounded-[2rem] lg:border lg:border-[#181A17]":""}`}><div className="flex items-center justify-between"><span className="text-xs font-black tracking-[.18em]">{n}</span><span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#181A17]/20 transition group-hover:rotate-6 group-hover:bg-[#D9F15B]"><Icon className="h-5 w-5"/></span></div><h3 className="mt-24 text-3xl font-semibold tracking-[-.04em]">{title}</h3><p className="mt-4 max-w-sm text-sm leading-relaxed text-[#62645D]">{copy}</p></article>)}
@@ -145,7 +133,7 @@ export default function Landing() {
           <div className="mx-auto max-w-[1320px]">
             <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><div className="text-xs font-bold uppercase tracking-[.2em]">Built for the businesses India is made of</div><h2 className="mt-4 text-5xl font-semibold tracking-[-.055em] md:text-7xl">One engine. Many shelves.</h2></div><Link to="/samples" className="text-sm font-bold underline underline-offset-8">Explore the prototypes</Link></div>
             <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {SAMPLE_BUSINESSES.map((business,i)=><Link to={`/products/new?sample=${business.id}`} key={business.id} className={`group relative overflow-hidden rounded-[1.5rem] bg-[#181A17] ${i%2?"lg:mt-10":""}`}><img src={business.image} alt="" className="aspect-[4/5] w-full object-cover opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-65"/><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"/><div className="absolute inset-x-0 bottom-0 p-5 text-white"><div className="text-[10px] uppercase tracking-[.2em] text-white/50">{business.language} · {business.category}</div><div className="mt-2 text-xl font-semibold">{business.name}</div><div className="mt-3 flex items-center gap-2 text-xs font-bold text-[#D9F15B]">Try this story <ArrowRight className="h-3.5 w-3.5"/></div></div></Link>)}
+              {SAMPLE_BUSINESSES.map((business,i)=><Link to={`/studio?sample=${business.id}`} key={business.id} className={`group relative overflow-hidden rounded-[1.5rem] bg-[#181A17] ${i%2?"lg:mt-10":""}`}><img src={business.image} alt="" className="aspect-[4/5] w-full object-cover opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-65"/><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"/><div className="absolute inset-x-0 bottom-0 p-5 text-white"><div className="text-[10px] uppercase tracking-[.2em] text-white/50">{business.language} · {business.category}</div><div className="mt-2 text-xl font-semibold">{business.name}</div><div className="mt-3 flex items-center gap-2 text-xs font-bold text-[#D9F15B]">Try this story <ArrowRight className="h-3.5 w-3.5"/></div></div></Link>)}
             </div>
           </div>
         </section>
@@ -153,7 +141,7 @@ export default function Landing() {
         <section className="px-5 py-24 md:px-10 lg:py-32">
           <div className="mx-auto max-w-[1320px] overflow-hidden rounded-[2.5rem] bg-[#D9F15B] px-6 py-14 md:px-14 md:py-20 lg:grid lg:grid-cols-[1fr_auto] lg:items-end">
             <div><div className="flex items-center gap-2 text-xs font-black uppercase tracking-[.2em]"><Sparkles className="h-4 w-4"/> Your shop already has a story</div><h2 className="mt-6 max-w-4xl text-5xl font-semibold leading-[.9] tracking-[-.065em] md:text-7xl lg:text-8xl">Put it online before the shutter closes.</h2></div>
-            <div className="mt-10 flex flex-col gap-3 lg:mt-0"><Link to="/products/new" className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#181A17] px-7 py-4 text-sm font-bold text-white">Start with one product <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1"/></Link><Link to="/app" className="text-center text-xs font-bold underline underline-offset-4">Already set up? Open dashboard</Link></div>
+            <div className="mt-10 flex flex-col gap-3 lg:mt-0"><Link to="/studio" className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#181A17] px-7 py-4 text-sm font-bold text-white">Start with one product <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1"/></Link><Link to="/app" className="text-center text-xs font-bold underline underline-offset-4">Already set up? Open dashboard</Link></div>
           </div>
         </section>
       </main>

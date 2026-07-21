@@ -47,7 +47,7 @@ export default function Samples() {
                   <ArrowRight className="w-3.5 h-3.5"/>
                   <span className="flex items-center gap-1"><Store className="w-3.5 h-3.5"/> Store</span>
                 </div>
-                <button onClick={()=>navigate(`/products/new?sample=${sample.id}`)} className="text-sm font-semibold text-[#C85C32] hover:text-[#A94827] flex items-center gap-1">Try sample <ArrowRight className="w-4 h-4"/></button>
+                <button onClick={()=>navigate(`/studio?sample=${sample.id}`)} className="text-sm font-semibold text-[#C85C32] hover:text-[#A94827] flex items-center gap-1">Try sample <ArrowRight className="w-4 h-4"/></button>
               </div>
             </div>
           </motion.article>

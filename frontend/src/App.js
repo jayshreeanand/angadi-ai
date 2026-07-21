@@ -27,6 +27,7 @@ function App() {
           <Route element={<AppShell />}>
             <Route path="/app" element={<Dashboard />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/studio" element={<AddProduct />} />
             <Route path="/products/new" element={<AddProduct />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/orders" element={<Orders />} />

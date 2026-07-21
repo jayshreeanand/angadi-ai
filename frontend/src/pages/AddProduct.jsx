@@ -76,6 +76,7 @@ export default function AddProduct() {
   const navigate = useNavigate();
   const location = useLocation();
   const [params] = useSearchParams();
+  const mode = params.get("mode") || "all";
   const { refreshAll } = useApp();
 
   useEffect(() => {
@@ -91,11 +92,12 @@ export default function AddProduct() {
       sku: `ANG-${sampleId.slice(0, 2).toUpperCase()}01`, image: business?.image,
     };
     setTranscript(business?.quote || "");
-    setItems([{ id: crypto.randomUUID(), preview: product.image, status: "ready", cleaned: null, meta: {
+    setItems([{ id: crypto.randomUUID(), preview: product.image, sourceType: sampleId === "saree" ? "video" : "image", status: "ready", cleaned: null, meta: {
       title: product.title, description: product.description, category: product.category,
       tags: ["local", "handmade", "small-business"], suggested_price: product.price,
       suggested_stock: product.stock, sku: product.sku, confidence: .96,
     }}]);
+    window.setTimeout(() => document.getElementById("generated-results")?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
   }, [params]);
 
   const startListening = () => {
@@ -191,9 +193,13 @@ export default function AddProduct() {
       <button onClick={() => navigate(-1)} className="text-sm text-slate-500 hover:text-slate-900 flex items-center gap-1" data-testid="back-btn">
         <ArrowLeft className="w-4 h-4" /> Back
       </button>
-      <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-[#A94827]"><Sparkles className="w-3.5 h-3.5"/> Shelf to store</div>
-      <h1 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight" style={{ fontFamily: "Outfit, sans-serif" }}>Show the product. Tell its story.</h1>
-      <p className="mt-2 text-sm text-slate-500 max-w-2xl">Take a photo or short video and describe the product naturally. Angadi turns both into a ready-to-sell online listing.</p>
+      <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-[#A94827]"><Sparkles className="w-3.5 h-3.5"/> Angadi Capture Studio</div>
+      <h1 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight" style={{ fontFamily: "Outfit, sans-serif" }}>One product in. A complete listing out.</h1>
+      <p className="mt-2 text-sm text-slate-500 max-w-2xl">Use your camera, upload a photo or choose a short video. Add the details in your own voice, then review exactly what customers will see.</p>
+
+      <div className="mt-6 grid grid-cols-3 overflow-hidden rounded-2xl border border-slate-100 bg-white">
+        {[{label:"1. Capture",copy:"Photo or video"},{label:"2. Describe",copy:"Speak naturally"},{label:"3. Review",copy:"Edit and publish"}].map((step,index)=><div key={step.label} className={`p-3 md:p-4 ${index<2?"border-r border-slate-100":""}`}><div className={`text-xs font-semibold ${index===0?"text-[#C85C32]":"text-slate-700"}`}>{step.label}</div><div className="mt-1 hidden text-[10px] text-slate-400 sm:block">{step.copy}</div></div>)}
+      </div>
 
       <div className="mt-6 rounded-2xl border border-orange-100 bg-[#FFF9F5] p-5">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -231,33 +237,33 @@ export default function AddProduct() {
         <div className="mx-auto w-14 h-14 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center">
           <Upload className="w-6 h-6 text-[#C85C32]" />
         </div>
-        <div className="mt-4 text-slate-700 font-medium">Drop product photos or a short video here</div>
+        <div className="mt-4 text-slate-700 font-medium">{mode === "video" ? "Record or upload a short product video" : mode === "photo" ? "Open your camera or upload a product photo" : "Drop product photos or a short video here"}</div>
         <div className="text-xs text-slate-500 mt-1">For video, Angadi extracts a clear product frame automatically.</div>
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-          <button onClick={() => inputRef.current?.click()} data-testid="upload-btn" className="text-sm px-4 py-2 rounded-xl bg-[#C85C32] hover:bg-[#A94827] text-white flex items-center gap-2 transition active:scale-[0.98]">
+          <button onClick={() => inputRef.current?.click()} data-testid="upload-btn" className={`text-sm px-4 py-2 rounded-xl flex items-center gap-2 transition active:scale-[0.98] ${mode !== "video" ? "bg-[#C85C32] hover:bg-[#A94827] text-white" : "bg-white border border-slate-200 text-slate-700"}`}>
             <Upload className="w-4 h-4" /> Upload images
           </button>
-          <button onClick={() => cameraRef.current?.click()} className="text-sm px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 flex items-center gap-2 text-slate-700" data-testid="camera-btn">
+          <button onClick={() => cameraRef.current?.click()} className={`text-sm px-4 py-2 rounded-xl flex items-center gap-2 ${mode === "photo" ? "bg-[#C85C32] hover:bg-[#A94827] text-white" : "bg-white border border-slate-200 hover:bg-slate-50 text-slate-700"}`} data-testid="camera-btn">
             <Camera className="w-4 h-4" /> Camera
           </button>
-          <button onClick={() => videoRef.current?.click()} className="text-sm px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 flex items-center gap-2 text-slate-700" data-testid="video-btn">
-            <Video className="w-4 h-4" /> Upload video
+          <button onClick={() => videoRef.current?.click()} className={`text-sm px-4 py-2 rounded-xl flex items-center gap-2 ${mode === "video" ? "bg-[#C85C32] hover:bg-[#A94827] text-white" : "bg-white border border-slate-200 hover:bg-slate-50 text-slate-700"}`} data-testid="video-btn">
+            <Video className="w-4 h-4" /> Record / upload video
           </button>
         </div>
         <input ref={inputRef} type="file" multiple accept="image/*" hidden onChange={(e) => handleFiles(e.target.files)} />
         <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={(e) => handleFiles(e.target.files)} />
-        <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" hidden onChange={(e) => handleFiles(e.target.files)} />
+        <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" capture="environment" hidden onChange={(e) => handleFiles(e.target.files)} />
 
         <div className="mx-auto mt-7 max-w-xl border-t border-slate-200 pt-5">
           <div className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">No product handy? Try a sample</div>
           <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <button onClick={() => navigate("/products/new?sample=yuva")} className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-2.5 text-left transition hover:border-[#C85C32] hover:shadow-sm">
+            <button onClick={() => navigate("/studio?sample=yuva")} className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-2.5 text-left transition hover:border-[#C85C32] hover:shadow-sm">
               <img src={SAMPLE_PRODUCTS[0].image} alt="Sample handmade bag" className="h-12 w-12 rounded-lg object-cover" />
-              <span><span className="block text-xs font-semibold">Handmade Yuva bag</span><span className="mt-0.5 block text-[10px] text-slate-500">Tamil voice + product photo</span></span>
+              <span><span className="block text-xs font-semibold">Try sample photo</span><span className="mt-0.5 block text-[10px] text-slate-500">Yuva bag · Tamil voice</span></span>
             </button>
-            <button onClick={() => navigate("/products/new?sample=saree")} className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-2.5 text-left transition hover:border-[#C85C32] hover:shadow-sm">
+            <button onClick={() => navigate("/studio?sample=saree")} className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-2.5 text-left transition hover:border-[#C85C32] hover:shadow-sm">
               <img src={SAMPLE_BUSINESSES[1].image} alt="Sample handloom saree" className="h-12 w-12 rounded-lg object-cover" />
-              <span><span className="block text-xs font-semibold">Sambalpuri saree</span><span className="mt-0.5 block text-[10px] text-slate-500">Hindi voice + product visual</span></span>
+              <span><span className="block text-xs font-semibold">Try sample video</span><span className="mt-0.5 block text-[10px] text-slate-500">Sambalpuri saree · Hindi voice</span></span>
             </button>
           </div>
           <a href={SAMPLE_BUSINESSES[1].video} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-semibold text-[#A94827] hover:underline">Watch the saree-selling reference <ExternalLink className="h-3 w-3" /></a>
@@ -267,9 +273,9 @@ export default function AddProduct() {
       {/* generated items */}
       <AnimatePresence>
         {items.length > 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8">
+          <motion.div id="generated-results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 scroll-mt-24">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold">AI-generated details</h3>
+              <div><div className="text-[10px] font-semibold uppercase tracking-[.15em] text-emerald-600">Result ready</div><h3 className="mt-1 font-semibold">Your AI-generated listing</h3></div>
               <button onClick={saveAll} data-testid="save-all-btn" className="text-sm px-4 py-2 rounded-xl bg-[#C85C32] hover:bg-[#A94827] text-white flex items-center gap-2 shadow-sm transition active:scale-[0.98]">
                 <Check className="w-4 h-4" /> Save {items.filter(x => x.status === "ready").length} products
               </button>

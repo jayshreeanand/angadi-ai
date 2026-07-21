@@ -1,11 +1,12 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingCart, Receipt, Users, BarChart3, Settings as SettingsIcon, Search, Bell, Play, Clapperboard, Store, Camera } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Receipt, Users, BarChart3, Settings as SettingsIcon, Search, Bell, Play, Clapperboard, Store, Camera, ScanLine } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useApp } from "@/lib/store";
 import DemoMode from "@/components/DemoMode";
 
 const NAV = [
   { to: "/app", label: "Dashboard", icon: LayoutDashboard, testId: "sidebar-nav-dashboard" },
+  { to: "/studio", label: "Capture studio", icon: ScanLine, testId: "sidebar-nav-studio" },
   { to: "/products", label: "Products", icon: Package, testId: "sidebar-nav-products" },
   { to: "/orders", label: "Orders", icon: ShoppingCart, testId: "sidebar-nav-orders" },
   { to: "/billing", label: "Billing", icon: Receipt, testId: "sidebar-nav-billing" },
@@ -101,7 +102,7 @@ export default function AppShell() {
 
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 h-17 bg-white/95 backdrop-blur-xl border-t border-slate-100 px-4 py-2 grid grid-cols-4 shadow-[0_-8px_30px_-20px_rgba(0,0,0,.25)]">
         <NavLink to="/app" end className={({isActive})=>`flex flex-col items-center gap-1 text-[10px] ${isActive?"text-[#C85C32]":"text-slate-500"}`}><LayoutDashboard className="w-5 h-5"/>Home</NavLink>
-        <NavLink to="/products/new" className={({isActive})=>`flex flex-col items-center gap-1 text-[10px] ${isActive?"text-[#C85C32]":"text-slate-500"}`}><Camera className="w-5 h-5"/>Add</NavLink>
+        <NavLink to="/studio" className={({isActive})=>`flex flex-col items-center gap-1 text-[10px] ${isActive?"text-[#C85C32]":"text-slate-500"}`}><Camera className="w-5 h-5"/>Capture</NavLink>
         <NavLink to="/samples" className={({isActive})=>`flex flex-col items-center gap-1 text-[10px] ${isActive?"text-[#C85C32]":"text-slate-500"}`}><Clapperboard className="w-5 h-5"/>Stories</NavLink>
         <NavLink to="/store/yuva" className="flex flex-col items-center gap-1 text-[10px] text-slate-500"><Store className="w-5 h-5"/>Store</NavLink>
       </nav>

@@ -532,11 +532,11 @@ async def ai_command(body: CommandRequest):
             "data": {"product": {**p, "stock": new_stock}, "before": p["stock"], "after": new_stock},
         }
 
-    if any(k in tl for k in ["today's sales", "todays sales", "show sales", "today sales", "show today"]):
+    if any(k in tl for k in ["today's sales", "todays sales", "show sales", "today sales", "show today", "आज की बिक्री", "आज कितनी बिक्री", "இன்றைய விற்பனை", "இன்று விற்பனை", "నేటి అమ్మకాలు"]):
         return await do_show_stats()
-    if "low stock" in tl or "restock" in tl:
+    if any(k in tl for k in ["low stock", "restock", "कम स्टॉक", "स्टॉक कम", "குறைந்த இருப்பு", "ஸ்டாக் குறைவு", "తక్కువ స్టాక్"]):
         return await do_low_stock()
-    if "publish" in tl and "product" in tl:
+    if ("publish" in tl and "product" in tl) or any(k in tl for k in ["सभी उत्पाद ऑनलाइन", "எல்லா பொருட்களையும் ஆன்லைனில்", "అన్ని ఉత్పత్తులను ఆన్‌లైన్‌లో"]):
         await db.products.update_many({}, {"$set": {"online": True}})
         n = await db.products.count_documents({})
         await log_activity("globe", "All products published online",
@@ -544,7 +544,7 @@ async def ai_command(body: CommandRequest):
         return {"intent": "publish",
                 "title": "✓ Storefront Synced",
                 "response": f"Published {n} products online. Your storefront is live."}
-    if "generate bill" in tl or "billing" in tl or "invoice" in tl:
+    if any(k in tl for k in ["generate bill", "billing", "invoice", "बिल बनाओ", "பில் உருவாக்கு", "బిల్లు తయారు"]):
         return {"intent": "open_billing",
                 "title": "Billing ready",
                 "response": "Opening billing… select products to generate an invoice."}

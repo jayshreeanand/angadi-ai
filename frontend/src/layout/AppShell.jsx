@@ -25,12 +25,12 @@ export default function AppShell() {
     <div className="flex h-screen bg-white text-slate-900" data-testid="app-shell">
       {/* Sidebar */}
       <aside className="w-64 hidden md:flex flex-col border-r border-slate-100 bg-[#F9FAFB]/60 backdrop-blur">
-        <div className="h-16 flex items-center gap-2 px-6">
+        <NavLink to="/" aria-label="Go to Angadi AI landing page" className="h-16 flex items-center gap-2 px-6 transition-opacity hover:opacity-75">
           <div className="w-8 h-8 rounded-lg bg-[#C85C32] flex items-center justify-center shadow-sm">
             <Store className="w-4 h-4 text-white" strokeWidth={2.2} />
           </div>
           <span className="font-semibold text-lg tracking-tight">Angadi<span className="text-[#C85C32]">AI</span></span>
-        </div>
+        </NavLink>
 
         <nav className="flex-1 px-3 py-2 space-y-1">
           {NAV.map(({ to, label, icon: Icon, testId }) => (
@@ -66,7 +66,7 @@ export default function AppShell() {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Topbar */}
         <header className="h-16 shrink-0 flex items-center gap-4 px-4 md:px-8 border-b border-slate-100 bg-white/70 backdrop-blur-xl sticky top-0 z-30">
-          <NavLink to="/app" className="md:hidden flex items-center gap-2 font-semibold"><span className="w-8 h-8 rounded-lg bg-[#C85C32] text-white flex items-center justify-center"><Store className="w-4 h-4"/></span><span>Angadi<span className="text-[#C85C32]">AI</span></span></NavLink>
+          <NavLink to="/" aria-label="Go to Angadi AI landing page" className="md:hidden flex items-center gap-2 font-semibold"><span className="w-8 h-8 rounded-lg bg-[#C85C32] text-white flex items-center justify-center"><Store className="w-4 h-4"/></span><span>Angadi<span className="text-[#C85C32]">AI</span></span></NavLink>
           <div className="flex-1 max-w-xl relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
